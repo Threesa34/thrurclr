@@ -1,0 +1,9 @@
+[
+    
+    {
+        "Query":"CREATE TABLE IF NOT EXISTS `users` ( `id` INT NOT NULL AUTO_INCREMENT , `name` VARCHAR(1000) NULL , `email` VARCHAR(1000) NULL , `mobile` BIGINT NULL , `role` VARCHAR(100) NULL , `status` INT NOT NULL DEFAULT '0' , `password` VARCHAR(200) NULL , `createddate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP , `createdby` INT NULL,`companyid` INT NULL ,`deviceid` VARCHAR(500) NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;ALTER TABLE `users` ADD IF NOT EXISTS `firstlogin` INT NULL DEFAULT NULL AFTER `password`;INSERT INTO `users` (`name`,`email`,`mobile`,`role`,`password`) SELECT * FROM (SELECT 'Mayur Mhatre', 'mhatre975@gmail.com', 9768241151,'Superadmin','7554388c13e72ecb8fc4068552173218') AS tmp WHERE NOT EXISTS (SELECT name FROM `users` WHERE `email` = 'mhatre975@gmail.com' AND `mobile` = 9768241151) LIMIT 1;"
+    },
+    {
+        "Query":"CREATE TABLE IF NOT EXISTS `member_master` ( `id` INT NOT NULL AUTO_INCREMENT ,`name` VARCHAR(100) NULL ,`roomno` VARCHAR(100) NULL ,`building` VARCHAR(1000) NULL , `street` VARCHAR(1000) NULL ,`locality` VARCHAR(1000) NULL ,`city` VARCHAR(1000) NULL ,`state` VARCHAR(1000) NULL ,`pincode` VARCHAR(10) NULL ,`email` VARCHAR(1000) NULL ,`mobile1` BIGINT(14) NULL ,`mobile2` BIGINT(14) NULL ,`voteridno` VARCHAR(1000) NULL ,`status` INT NOT NULL DEFAULT '0' ,`createddate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP , `createdby` INT NULL,  PRIMARY KEY (`id`)) ENGINE = InnoDB;ALTER TABLE `member_master` ADD IF NOT EXISTS `gender` VARCHAR(10) NULL AFTER `name`;"
+    }
+]
