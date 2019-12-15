@@ -13,6 +13,12 @@ angular.module('MyApp')
     ListMembers: function () {
         return $resource('/api/ListMembers',{});
     },
+	ListMembersNearMe: function () {
+        return $resource('/api/ListMembersNearMe',{});
+    },
+    getDashboardCounts: function () {
+        return $resource('/api/getDashboardCounts',{});
+    },
       
     }
   }]);

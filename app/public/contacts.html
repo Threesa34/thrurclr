@@ -1,0 +1,251 @@
+<div ng-include="'./public/navbar.html'"></div>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-6 col-lg-6 col-xl-6 col-12">
+      <h3>Contacts Details</h3>
+    </div>
+  </div>
+  <div class="row mb-2">
+    <div class="col-md-6 col-12">
+      <button class="btn btn-info" data-toggle="modal" data-target="#ModalAddMember">Add Contact</button>
+      <button class="btn btn-info" ng-click="resetSelection()" data-toggle="modal" data-target="#ModalImportMember">Import Contacts</button>
+    </div>
+    <div class="col-md-6 col-12">
+      <input class="form-control col-md-6 ml-auto" ng-model="Search" placeholder="Search"/>
+    </div>
+  </div>
+  <div class="row" ng-init="ListMembers()">
+    <div class="col-12">
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+          <thead>
+            <th>#</th>
+            <th class="text-center">Name</th>
+            <th class="text-center">Gender</th>
+            <th class="text-center">Mobile No.</th>
+            <th class="text-center">Email</th>
+            <th class="text-center">Location</th>
+            <th class="text-center"> </th>
+          </thead>
+          <tbody>
+            <tr ng-repeat="_data in MembersList | filter: Search">
+              <td>{{$index +1}}</td>
+              <td>{{_data.name}}</td>
+              <td>{{_data.gender}}</td>
+              <td>{{_data.mobile1}}</td>
+              <td>{{_data.email || 'Not Available'}}</td>
+              <td>{{_data.location|| 'Not Availabel'}}</td>
+              <td class="text-center">
+                <button class="btn btn-warning btn-sm" ng-click="GetMemberDetails(_data)">Edit</button>
+                <button class="btn btn-danger btn-sm">Delete</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+
+
+
+</div>
+
+
+<!-- The Modal -->
+<div class="modal fade" id="ModalImportMember">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Import Contacts Details</h4>
+        <button type="button" class="close" data-dismiss="modal">×</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-6 col-md-6 col-lg-6 col-xl-6 text-center">
+              <a href="./files/memberDetails.xlsx" style="text-decoration:none;color:black;"  download><i class="fa fa-download" style="font-size:50px;"></i>
+			  </a>
+			  <div class="col-12">
+			  <label>Download excel file, fill data in same excel file and load excel file to import records.<label>
+			  </div>
+			  <div class="col-12">
+			  <label>एक्सेल फाइल डाउनलोड करा, त्याच फाईलमध्ये उपलब्ध डेटा भरा आणि संपर्क अपलोड करण्यासाठी ती फाइल लोड करा.<label>
+			  </div>
+			  
+          </div>
+          <div class="col-6 col-md-6 col-lg-6 col-xl-6">
+              <div class="custom-file mb-3">
+                  <input type="file" class="custom-file-input" id="customFile" name="filename" onchange="angular.element(this).scope().UploadFile(this.files)">
+                  <label class="custom-file-label" for="customFile">Choose file</label>
+                </div>
+          </div>
+          <div class="col-12">
+            <label class="text-danger">{{errormsg}}</label>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+          <input type="button" value="Import" class="btn btn-success"  ng-disabled="!SelectedFileForUpload"
+          ng-click="ParseExcelDataAndSave()" />
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- The Modal -->
+<div class="modal fade" id="ModalAddMember">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Contact Details</h4>
+        <button type="button" class="close" data-dismiss="modal">×</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <form name="membersDetails">
+          <div class="row">
+            <div class="col-md-9 col-12 col-sm-12 col-lg-9">
+              <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" class="form-control" ng-model="member[0].name" id="name" placeholder="Name" required>
+              </div>
+            </div>
+            <div class="col-md-3 col-12 col-sm-12 col-lg-3">
+              <div class="form-group">
+                <label for="gender">Gender:</label> <br>
+                <select class="form-control" id="gender" ng-model="member[0].gender"
+                  ng-options="_obj for _obj in ['Male','Female','Transgender']">
+                  <option value="" selected disabled>SELECT</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-12">
+              <h5>Address</h5>
+              <hr>
+            </div>
+            <div class="col-md-6 col-12 col-sm-12 col-lg-6">
+              <div class="form-group">
+                <label for="roomno">Room No.:</label>
+                <input type="text" class="form-control" ng-model="member[0].roomno" id="roomno" placeholder="Room No.">
+              </div>
+            </div>
+            <div class="col-md-6 col-12 col-sm-12 col-lg-6">
+              <div class="form-group">
+                <label for="building">Building/House/Appartment Name:</label>
+                <input type="text" class="form-control" ng-model="member[0].building" id="building"
+                  placeholder="Building/House/Appartment Name">
+              </div>
+            </div>
+            <div class="col-md-6 col-12 col-sm-12 col-lg-6">
+              <div class="form-group">
+                <label for="street">Street Name:</label>
+                <input type="text" class="form-control" ng-model="member[0].street" id="street"
+                  placeholder="Street Name">
+              </div>
+            </div>
+            <div class="col-md-6 col-12 col-sm-12 col-lg-6">
+              <div class="form-group">
+                <label for="roomno">Locality/Area:</label>
+                <input type="text" class="form-control" ng-model="member[0].locality" id="roomno"
+                  placeholder="Locality/Area">
+              </div>
+            </div>
+            <div class="col-md-4 col-12 col-sm-12 col-lg-4">
+              <div class="form-group">
+                <label for="city">City:</label>
+                <input type="text" class="form-control" ng-model="member[0].city" id="city" placeholder="City">
+              </div>
+            </div>
+            <div class="col-md-4 col-12 col-sm-12 col-lg-4">
+              <div class="form-group">
+                <label for="state">State:</label>
+                <input type="text" class="form-control" ng-model="member[0].state" id="state" placeholder="State">
+              </div>
+            </div>
+            <div class="col-md-4 col-12 col-sm-12 col-lg-4">
+              <div class="form-group">
+                <label for="zipcode">Zip code:</label>
+                <input type="text" class="form-control" ng-model="member[0].pincode" id="zipcode"
+                  placeholder="Zip code">
+              </div>
+            </div>
+            <div class="col-12">
+              <h5>Contact</h5>
+              <hr>
+            </div>
+
+            <div class="col-md-6 col-12 col-sm-12 col-lg-6">
+              <div class="form-group">
+                <label for="mobileno">Mobile No.:</label>
+                <input type="number" class="form-control" ng-model="member[0].mobile1" id="mobileno"
+                  placeholder="Mobile No." required>
+              </div>
+            </div>
+            <div class="col-md-6 col-12 col-sm-12 col-lg-6">
+              <div class="form-group">
+                <label for="mobile2">ALt. Mobile No.:</label>
+                <input type="number" class="form-control" ng-model="member[0].mobile2" id="mobile2"
+                  placeholder="ALt. Mobile No.">
+              </div>
+            </div>
+            <div class="col-md-12 col-12 col-sm-12 col-lg-12">
+              <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" class="form-control" ng-model="member[0].email" id="email" placeholder="Email">
+              </div>
+            </div>
+	
+		<div class="col-12">
+              <h5>Electoral Details</h5>
+              <hr>
+            </div>
+			<div class="col-md-4 col-12 col-sm-12 col-lg-4">
+              <div class="form-group">
+                <label for="listno">List No.:</label> <br>
+                <input type="text" class="form-control" ng-model="member[0].listno" id="listno"
+                  placeholder="List No.">
+              </div>
+            </div>
+
+			<div class="col-md-4 col-12 col-sm-12 col-lg-4">
+              <div class="form-group">
+                <label for="voterid">Voter Id:</label> <br>
+                <input type="text" class="form-control" ng-model="member[0].voteridno" id="voterid"
+                  placeholder="Voter Id">
+              </div>
+            </div>
+			
+			<div class="col-md-4 col-12 col-sm-12 col-lg-4">
+              <a class="btn btn-secondary" ng-class="{'btn-success':member[0].nearme}" ng-click="setNearmestatus()">Near Me</a>
+            </div>
+	
+          </div>
+        </form>
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" ng-disabled="membersDetails.$invalid"
+          ng-click="SaveMemberDetails()" data-dismiss="modal">Submit</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+    // Add the following code if you want the name of the file appear on select
+    $(".custom-file-input").on("change", function() {
+      var fileName = $(this).val().split("\\").pop();
+      $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+    });
+    </script>

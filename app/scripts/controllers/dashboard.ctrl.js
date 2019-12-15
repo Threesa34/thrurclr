@@ -1,10 +1,40 @@
 angular.module('MyApp')
 	.controller('DashboardController', ['$scope', '$http', '$route', '$location', '$window', '$timeout', 'Upload', 'Dashboard', function ($scope, $http, $route, $location, $window, $timeout, Upload, Dashboard) {
-        console.log('Dashboard ctrl works')
 
-        $scope.ListMembers = function()
+$scope.member = [{nearme:false}];
+
+$scope.setNearmestatus = function(sts)
+{
+	if(sts)
+	{
+		$scope.member[0].nearme = sts;
+	}
+	else
+	{
+		if(!$scope.member[0].nearme)
+			$scope.member[0].nearme = true;
+		else
+		$scope.member[0].nearme = false;
+	}	
+}
+
+        $scope.getDashboardCounts = function()
+        {
+            Dashboard.getDashboardCounts().query().$promise.then(function(response){
+                $scope.dashboardCounts = response;
+            });
+        }
+
+		$scope.ListMembers = function()
         {
             Dashboard.ListMembers().query().$promise.then(function(response){
+                $scope.MembersList = response;
+            });
+        }
+
+		$scope.ListMembersNearMe = function()
+        {
+            Dashboard.ListMembersNearMe().query().$promise.then(function(response){
                 $scope.MembersList = response;
             });
         }
@@ -33,6 +63,28 @@ angular.module('MyApp')
                         $scope.member = [];
                         $scope.$apply();
                         $scope.ListMembers();
+                    }
+                });
+            });
+        };
+
+		$scope.SaveNearerMemberDetails = function()
+        {
+            Dashboard.SaveMemberDetails().save($scope.member).$promise.then(function (response) {
+                Swal({
+					type: response.type,
+					title: response.title,
+					text: response.message,
+				}).then(() => {
+                    if(response.status == 0)
+                    {
+
+                    }
+                    else
+                    {
+                        $scope.member = [];
+                        $scope.$apply();
+                        $scope.ListMembersNearMe();
                     }
                 });
             });

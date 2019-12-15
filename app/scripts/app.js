@@ -18,6 +18,14 @@ angular.module('MyApp', ['ngResource',
       templateUrl : "public/dashboard.html",
        controller:"DashboardController"
     })
+	.when("/contacts", {
+      templateUrl : "public/contacts.html",
+       controller:"DashboardController"
+    })
+	.when("/nearme", {
+      templateUrl : "public/nearme.html",
+       controller:"DashboardController"
+    })
 	.otherwise({
 		  redirectTo: ''
 		});
